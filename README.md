@@ -1,4 +1,4 @@
-# defi.space Indexer
+# Laplace Indexer
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/release/python-3120/)
@@ -16,8 +16,10 @@ A blockchain indexer built with DipDup for defi.space protocol, providing real-t
 - [Usage](#usage)
   - [Running the Indexer](#running-the-indexer)
   - [Configuration Options](#configuration-options)
+  - [Development Commands](#development-commands)
 - [Architecture](#architecture)
   - [Core Components](#core-components)
+  - [Project Structure](#project-structure)
 - [API Examples](#api-examples)
 - [Performance Considerations](#performance-considerations)
 - [Contributing](#contributing)
@@ -131,7 +133,38 @@ The indexer can be configured through:
 - YAML configuration files
 - Command-line arguments
 
-See the DipDup documentation for detailed configuration options.
+Key configuration files:
+- `defi_space_indexer/dipdup.yaml`: Main configuration file
+- `defi_space_indexer/configs/dipdup.sqlite.yaml`: SQLite-specific configuration
+- `defi_space_indexer/configs/dipdup.compose.yaml`: Docker Compose configuration
+- `defi_space_indexer/env.example`: Template for environment variables
+
+### Development Commands
+
+The project includes a Makefile with useful commands for development:
+
+```bash
+# Install dependencies
+make install
+
+# Update dependencies
+make update
+
+# Format code
+make format
+
+# Lint code
+make lint
+
+# Build Docker image
+make image
+
+# Start Docker Compose stack
+make up
+
+# Stop Docker Compose stack
+make down
+```
 
 ## 🏗️ Architecture
 
@@ -150,6 +183,42 @@ The indexer tracks two main protocol components:
 - Reactor contracts for individual farming pools
 - User stakes and rewards
 - Staking and reward events
+
+### Project Structure
+
+The `defi_space_indexer` package is organized as follows:
+
+```
+defi_space_indexer/
+├── abi/                  # Contract ABI definitions
+├── configs/              # Configuration variants
+│   ├── dipdup.sqlite.yaml
+│   ├── dipdup.compose.yaml
+│   └── dipdup.swarm.yaml
+├── deploy/               # Deployment configurations
+├── handlers/             # Event handlers
+│   ├── on_pair_created.py
+│   ├── on_swap.py
+│   ├── on_mint.py
+│   └── ...
+├── hooks/                # Periodic jobs and callbacks
+│   ├── calculate_amm_metrics.py
+│   ├── calculate_farming_metrics.py
+│   └── ...
+├── models/               # Data models
+│   ├── amm_models.py
+│   └── farming_models.py
+├── sql/                  # SQL queries
+├── types/                # Type definitions
+├── dipdup.yaml           # Main configuration
+└── env.example           # Environment variables template
+```
+
+Key components:
+- **Handlers**: Process blockchain events (25+ event types)
+- **Models**: Define data structures for AMM and Farming
+- **Hooks**: Implement periodic jobs for metrics calculation
+- **Configs**: Provide different deployment configurations
 
 ## 💻 API Examples
 
